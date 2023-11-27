@@ -1,8 +1,8 @@
-library('neuralnet')
+
+library('kernlab')
 library('ggplot2')
 library('dplyr') # for resampling
 library('caret') # for confusion matrix
-library('grid')
 
 data <- read.table("Datasets/healthcare-dataset-stroke-data.csv", header = TRUE, sep = ",")
 header_names <- names(data)
@@ -42,22 +42,20 @@ myspecies = mysample[,5]
  print(myspecies)
 
 form <- stroke~age+heart_disease+hypertension+avg_glucose_level
-mytest <- neuralnet(stroke~age+heart_disease+hypertension+avg_glucose_level, mysample,
-                    hidden = 3, linear.output = FALSE)
-print(mytest)
-print(plot(mytest))
-mypred <- predict(mytest, subframe, rep = 1, all.units = FALSE)
-print(round(mypred))
-library(data.table)
-print(max.col(mypred)) # return column with maximum value
+mytest <- ksvm(stroke~age+heart_disease+hypertension+avg_glucose_level,
+              mysample ,kernel = 'vanilladot')
 
+
+mypred <- predict(mytest, subframe, type = 'response')
 myplot1 <-ggplot(mysample, aes(age, avg_glucose_level, colour = stroke)) + geom_point()
 myplot2 <-ggplot(mysample, aes(hypertension, heart_disease, colour = stroke)) + geom_point()
 myplot3 <-ggplot(subframe, aes(age, avg_glucose_level, colour = stroke)) + geom_point()
 myplot4 <-ggplot(subframe, aes(hypertension, heart_disease, colour = stroke)) + geom_point()
-myplot5 <-ggplot(subframe, aes(age, avg_glucose_level, colour = max.col(mypred))) + geom_point()
-myplot6 <-ggplot(subframe, aes(hypertension, heart_disease, colour = max.col(mypred))) + geom_point()
-
+mySVM <- summary(mytest)
+print(mySVM)
+myplot5 <-ggplot(subframe, aes(age, avg_glucose_level, colour = mypred)) + geom_point()
+myplot6 <-ggplot(subframe, aes(hypertension, heart_disease, colour = mypred)) + geom_point()
+library('grid')
 pushViewport(viewport(layout = grid.layout(3, 2)))
 print(myplot1, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
 print(myplot2, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
@@ -65,11 +63,8 @@ print(myplot3, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))
 print(myplot4, vp = viewport(layout.pos.row = 2, layout.pos.col = 2))
 print(myplot5, vp = viewport(layout.pos.row = 3, layout.pos.col = 1))
 print(myplot6, vp = viewport(layout.pos.row = 3, layout.pos.col = 2))
-#k nearest means
-mypred <- knn(mysample, subframe, myspecies, k=3, l = 0, prob = FALSE, use.all = TRUE)
-print(max.col(mypred))
-St_factor <- as.factor(stroke)
-print(as.integer(St_factor))
-St_integer <- as.integer(St_factor)
-mymatrix <- confusionMatrix(as.factor(max.col(mypred)), as.factor(St_integer))
+# confusion matrix
+print(as.factor(mypred))
+print(as.factor(stroke))
+mymatrix <- confusionMatrix(as.factor(mypred), as.factor(stroke))
 print(mymatrix)
