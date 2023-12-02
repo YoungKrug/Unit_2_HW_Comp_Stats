@@ -36,10 +36,10 @@ training_set[is.na(training_set)] <- 0
 subframe[is.na(subframe)] <- 0
 rnd <- sample(1:150, 1)
 set.seed(rnd)
-mysample = sample_n(subframe, 100, replace=TRUE)
+mysample <- sample_n(subframe, 100, replace=TRUE)
 # print(mysample)
-myspecies = mysample[,5]
- print(myspecies)
+myspecies <- mysample[,5]
+print(myspecies)
 
 form <- stroke~age+heart_disease+hypertension+avg_glucose_level
 mytest <- svm(stroke~age+heart_disease+hypertension+avg_glucose_level,
