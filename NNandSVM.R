@@ -3,6 +3,8 @@ library('kernlab')
 library('ggplot2')
 library('dplyr') # for resampling
 library('caret') # for confusion matrix
+library('e1071')
+library('neuralnet')
 
 data <- read.table("Datasets/healthcare-dataset-stroke-data.csv", header = TRUE, sep = ",")
 header_names <- names(data)
