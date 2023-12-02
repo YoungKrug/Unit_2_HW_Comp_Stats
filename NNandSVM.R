@@ -67,3 +67,5 @@ St_factor <- as.factor(stroke)
 St_integer <- as.integer(St_factor)
 mymatrix <- confusionMatrix(as.factor(max.col(mypred2)), as.factor(St_integer))
 print(mymatrix)
+
+#oddly enough, they both have the same confidence interval for the analysis.

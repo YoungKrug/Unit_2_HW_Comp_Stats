@@ -93,3 +93,5 @@ print(as.factor(stroke))
 mymatrix <- confusionMatrix(as.factor(mypred), as.factor(stroke))
 print(mymatrix)
 
+#once again, I was getting very similar confidence intervals.
+#wonder if the data am I giving it is incorrect. 
