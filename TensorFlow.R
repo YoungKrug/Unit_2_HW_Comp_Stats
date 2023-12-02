@@ -62,8 +62,7 @@ class_pred <- model %>% predict(test_images) %>% k_argmax() %>%
 # plot some classifications
 mymatrix <- confusionMatrix(as.factor(class_pred), as.factor(test_labels))
 print(mymatrix)
-print(pre_image)
-print(post_image)
 toc() # print time elapsed
-print("goodbye Greg...leaving R")
-#q()
+
+# The neural net and the ada had a higher CI, but this is a image classification dataset.
+# Introduces more error, and has more data. It also runs much much longer.
